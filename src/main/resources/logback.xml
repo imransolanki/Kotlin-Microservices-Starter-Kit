@@ -1,0 +1,46 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+
+                <!-- Provides a timestamp field in the JSON output -->
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                    <fieldName>timestamp</fieldName>
+                </timestamp>
+
+                <!-- Provides a log level field -->
+                <logLevel>
+                    <fieldName>level</fieldName>
+                </logLevel>
+
+                <!-- Provides the thread name field -->
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+
+                <!-- Provides the logger name field -->
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                </loggerName>
+
+                <!-- Provides the log message field -->
+                <message>
+                    <fieldName>message</fieldName>
+                </message>
+
+                <!-- Adds the exception details if any -->
+                <stackTrace>
+                    <fieldName>exception</fieldName>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="trace">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
+</configuration>
