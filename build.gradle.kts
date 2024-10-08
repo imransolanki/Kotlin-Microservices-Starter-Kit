@@ -4,6 +4,7 @@ val logback_version: String by project
 plugins {
     kotlin("jvm") version "2.0.20"
     id("io.ktor.plugin") version "3.0.0-rc-2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1+"
 }
 
 group = "org.edu"
@@ -28,7 +29,19 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
 
+    implementation("io.konform:konform:0.7.0")
+
+    implementation("io.ktor:ktor-serialization-gson")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm")
+
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+    testImplementation("io.kotest:kotest-assertions-core:$version")
+    testImplementation("io.kotest:kotest-assertions-core:5.7.2")
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
