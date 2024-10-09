@@ -34,12 +34,17 @@ dependencies {
     implementation("io.ktor:ktor-serialization-gson")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
 
+    implementation(platform("io.arrow-kt:arrow-stack:1+"))
+    implementation("io.arrow-kt:arrow-core")
+    implementation("io.arrow-kt:arrow-fx-coroutines")
+
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:$version")
-    testImplementation("io.kotest:kotest-assertions-core:5.7.2")
+    testImplementation("io.kotest.extensions:kotest-assertions-arrow:1.4.0")
+
 }
 
 tasks.withType<Test>().configureEach {

@@ -1,10 +1,19 @@
 package org.edu.org.edu.api
 
+import arrow.core.Either
+import io.konform.validation.Invalid
 import io.konform.validation.Validation
+import io.konform.validation.ValidationError
 import io.konform.validation.jsonschema.*
 import org.edu.api.Pet
 
-val validatePet = Validation<Pet> {
+fun validatePet(pet: Pet): Either<List<ValidationError>, Pet> {
+    val result = PET_VALIDATOR.validate(pet)
+    if (result is Invalid) return Either.Left(result.errors)
+    return Either.Right(pet)
+}
+
+val PET_VALIDATOR = Validation<Pet> {
 
     Pet::id required {
         minimum(1) hint ("Minimum is 1")

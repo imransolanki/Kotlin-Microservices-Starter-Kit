@@ -1,6 +1,5 @@
 package org.edu.api
 
-import io.konform.validation.Invalid
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
@@ -18,10 +17,10 @@ fun Route.routes() {
 
             val validation = validatePet(request)
 
-            if (validation is Invalid) {
+            validation.isLeft {
                 return@post call.respondText {
                     BadRequest
-                    validation.errors.toString()
+                    validation.getOrNull()!!.toString()
                 }
             }
 
@@ -36,10 +35,10 @@ fun Route.routes() {
 
             val validation = validatePet(request)
 
-            if (validation is Invalid) {
+            validation.isLeft {
                 return@put call.respondText {
                     BadRequest
-                    validation.errors.toString()
+                    validation.getOrNull()!!.toString()
                 }
             }
 
