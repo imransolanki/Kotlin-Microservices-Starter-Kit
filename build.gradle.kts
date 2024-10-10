@@ -1,5 +1,7 @@
 val kotlin_version: String by project
 val logback_version: String by project
+val postgres_version: String by project
+val exposed_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -37,6 +39,19 @@ dependencies {
     implementation(platform("io.arrow-kt:arrow-stack:1+"))
     implementation("io.arrow-kt:arrow-core")
     implementation("io.arrow-kt:arrow-fx-coroutines")
+
+    implementation("org.postgresql:postgresql:$postgres_version")
+    implementation("org.flywaydb:flyway-core:9.22.0")
+    implementation("com.zaxxer:HikariCP:5.0.0")
+
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-json:$exposed_version")
+
+    implementation("com.sksamuel.hoplite:hoplite-core:2.8.0.RC3")
+    implementation("com.sksamuel.hoplite:hoplite-yaml:2.8.0.RC3")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
