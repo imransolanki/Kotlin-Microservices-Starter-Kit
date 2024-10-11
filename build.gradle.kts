@@ -2,6 +2,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val postgres_version: String by project
 val exposed_version: String by project
+val koin_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -52,6 +53,9 @@ dependencies {
 
     implementation("com.sksamuel.hoplite:hoplite-core:2.8.0.RC3")
     implementation("com.sksamuel.hoplite:hoplite-yaml:2.8.0.RC3")
+
+    implementation("io.insert-koin:koin-core:$koin_version")
+    implementation("io.insert-koin:koin-ktor:$koin_version")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

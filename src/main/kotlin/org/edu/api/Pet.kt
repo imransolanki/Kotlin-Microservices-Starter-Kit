@@ -6,9 +6,9 @@ import kotlinx.serialization.SerialName
 @Serializable
 data class Pet (
 
-    @SerialName("id"        ) var id        : Int,
+    @SerialName("id"        ) var id        : Long?,
     @SerialName("name"      ) var name      : String,
-    @SerialName("photoUrls" ) var photoUrls : List<String> = arrayListOf(),
+    @SerialName("photoUrl"  ) var photoUrl  : String,
     @SerialName("status"    ) var status    : String
 
 )

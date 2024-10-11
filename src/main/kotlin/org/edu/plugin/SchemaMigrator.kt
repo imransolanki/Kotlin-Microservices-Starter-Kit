@@ -1,4 +1,4 @@
-package org.edu.org.edu.plugin
+package org.edu.plugin
 
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database

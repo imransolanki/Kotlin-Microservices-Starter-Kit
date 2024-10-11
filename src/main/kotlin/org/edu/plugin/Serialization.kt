@@ -1,4 +1,4 @@
-package org.edu.org.edu.plugin
+package org.edu.plugin
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder

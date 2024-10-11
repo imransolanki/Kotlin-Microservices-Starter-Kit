@@ -2,11 +2,10 @@ package org.edu
 
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
-import org.edu.org.edu.environment
-import org.edu.org.edu.plugin.DataSource
-import org.edu.org.edu.plugin.SchemaMigrator
-import org.edu.org.edu.plugin.configureSerialization
+import org.edu.plugin.DataSource
+import org.edu.plugin.SchemaMigrator
 import org.edu.plugin.configureRouting
+import org.edu.plugin.configureSerialization
 
 fun main(args: Array<String>) {
     SchemaMigrator(DataSource(environment())).run()
@@ -14,6 +13,7 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    configureApplication()
     configureRouting()
     configureSerialization()
 }

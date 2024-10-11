@@ -1,4 +1,4 @@
-package org.edu.org.edu.plugin
+package org.edu.plugin
 
 import com.zaxxer.hikari.HikariDataSource
 
