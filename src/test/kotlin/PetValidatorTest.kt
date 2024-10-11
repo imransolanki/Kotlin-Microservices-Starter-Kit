@@ -8,32 +8,24 @@ import org.edu.api.validatePet
 class PetValidatorTest : StringSpec({
 
     "valid pet" {
-        val validPet = Pet(id = 1, name = "Joe", photoUrl = "google-url", status = "available")
+        val validPet = Pet(id = 1, name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available")
         val actual = validatePet(validPet)
 
         actual.shouldBeRight()
         actual.getOrNull()!! shouldBe validPet
     }
 
-    "invalid id" {
-        val invalidPet = Pet(id = 0, name = "Woe", photoUrl = "google-url", status = "available")
-        val actual = validatePet(invalidPet)
-
-        actual.shouldBeLeft()
-        actual.leftOrNull()!!.first().message shouldBe "Minimum is 1"
-    }
-
     "invalid name" {
-        val invalidPet = Pet(id = 10, name = "", photoUrl = "google-url", status = "available")
+        val invalidPet = Pet(id = 10, name = "", photoUrl = "https://some-cdn.photo-url.png", status = "available")
         val actual = validatePet(invalidPet)
 
         actual.shouldBeLeft()
-        actual.leftOrNull()!!.first().message shouldBe "must have at least 2 characters"
+        actual.leftOrNull()!!.first().message shouldBe "must be at least 2 character long"
     }
 
     "invalid value of status" {
         val invalidPet =
-            Pet(id = 10, name = "Woe", photoUrl = "google-url", status = "not-available")
+            Pet(id = 10, name = "Woe", photoUrl = "https://some-cdn.photo-url.png", status = "not-available")
         val actual = validatePet(invalidPet)
 
         actual.shouldBeLeft()

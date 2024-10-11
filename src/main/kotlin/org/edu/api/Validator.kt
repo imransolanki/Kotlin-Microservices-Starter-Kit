@@ -4,7 +4,9 @@ import arrow.core.Either
 import io.konform.validation.Invalid
 import io.konform.validation.Validation
 import io.konform.validation.ValidationError
-import io.konform.validation.jsonschema.*
+import io.konform.validation.jsonschema.maxLength
+import io.konform.validation.jsonschema.minLength
+import io.konform.validation.jsonschema.pattern
 
 fun validatePet(pet: Pet): Either<List<ValidationError>, Pet> {
 

@@ -3,15 +3,16 @@ package org.edu.api
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.OK
+import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.edu.service.PetService
+import org.koin.ktor.ext.inject
 
 fun Route.routes() {
 
-    //val service by inject<PetService>()
-    val service = PetService()
+    val service by inject<PetService>()
 
     route("/pet") {
         post("/") {
