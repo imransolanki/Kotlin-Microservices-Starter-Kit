@@ -1,9 +1,9 @@
+package org.edu.api
+
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import org.edu.api.Pet
-import org.edu.api.validatePet
 
 class PetValidatorTest : StringSpec({
 
