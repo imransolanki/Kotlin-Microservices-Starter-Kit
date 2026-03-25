@@ -11,8 +11,7 @@ class PetValidatorTest : StringSpec({
         val validPet = Pet(id = 1, name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available")
         val actual = validatePet(validPet)
 
-        actual.shouldBeRight()
-        actual.getOrNull()!! shouldBe validPet
+        actual shouldBeRight validPet
     }
 
     "invalid name" {

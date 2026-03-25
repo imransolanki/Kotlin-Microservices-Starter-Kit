@@ -27,8 +27,7 @@ class PetServiceTest : FeatureSpec(
             scenario("valid pet") {
                 val result = service.createPet(pet)
 
-                result.shouldBeRight()
-                result.getOrNull()!! shouldBe pet
+                result shouldBeRight pet
             }
         }
 
@@ -41,8 +40,7 @@ class PetServiceTest : FeatureSpec(
                     )
                 val updatedPet = service.updatePet(newPet)
 
-                updatedPet.shouldBeRight()
-                updatedPet.getOrNull()!! shouldBe newPet
+                updatedPet shouldBeRight newPet
             }
             scenario("update non existing pet") {
                 val nonExistingPet =

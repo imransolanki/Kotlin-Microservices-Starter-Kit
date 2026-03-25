@@ -47,7 +47,7 @@ fun Route.routes() {
         }
 
         delete("/{petName}") {
-            val petName: String = call.parameters["petName"]!!.toString()
+            val petName: String = call.parameters["petName"]!!
 
             val result = service.deletePet(petName)
             result.isLeft { return@delete call.respond(BadRequest, result.leftOrNull()!!) }
