@@ -30,5 +30,4 @@ class PetValidatorTest : StringSpec({
         actual.shouldBeLeft()
         actual.leftOrNull()!!.first().message shouldBe "must be one of [available, sold]"
     }
-
 })

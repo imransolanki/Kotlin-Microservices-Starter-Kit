@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory
 private val log = LoggerFactory.getLogger("org.edu.api.PetRoutes")
 
 fun Route.routes() {
-
     val service by inject<PetService>()
 
     route("/pet") {
@@ -40,8 +39,9 @@ fun Route.routes() {
         }
 
         get("/{petId}") {
-            val petId = call.parameters["petId"]?.toLongOrNull()
-                ?: throw BadRequestException("petId must be a valid number")
+            val petId =
+                call.parameters["petId"]?.toLongOrNull()
+                    ?: throw BadRequestException("petId must be a valid number")
             val pet = service.getPet(petId)
             log.info("GET /pet/{} -> 200", petId)
             call.respond(OK, pet)

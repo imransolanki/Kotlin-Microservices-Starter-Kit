@@ -5,7 +5,8 @@ import org.edu.repository.PetRepositoryImpl
 import org.edu.service.PetService
 import org.koin.dsl.module
 
-val appModules = module {
-    single<PetRepository> { PetRepositoryImpl() }
-    single { PetService(get()) }
-}
+val appModules =
+    module {
+        single<PetRepository> { PetRepositoryImpl() }
+        single { PetService(get()) }
+    }

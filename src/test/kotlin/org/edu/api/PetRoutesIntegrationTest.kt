@@ -26,11 +26,12 @@ class PetRoutesIntegrationTest : FeatureSpec({
 
     afterEach { stopKoin() }
 
-    fun ApplicationTestBuilder.jsonClient() = createClient {
-        install(ContentNegotiation) {
-            gson { setFieldNamingStrategy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) }
+    fun ApplicationTestBuilder.jsonClient() =
+        createClient {
+            install(ContentNegotiation) {
+                gson { setFieldNamingStrategy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) }
+            }
         }
-    }
 
     feature("POST /pet/") {
         scenario("create a valid pet returns 201") {
@@ -39,10 +40,11 @@ class PetRoutesIntegrationTest : FeatureSpec({
                 application { module() }
                 val client = jsonClient()
 
-                val response = client.post("/pet/") {
-                    contentType(ContentType.Application.Json)
-                    setBody(Pet(id = null, name = "Buddy", photoUrl = "https://cdn.example.com/buddy.png", status = "available"))
-                }
+                val response =
+                    client.post("/pet/") {
+                        contentType(ContentType.Application.Json)
+                        setBody(Pet(id = null, name = "Buddy", photoUrl = "https://cdn.example.com/buddy.png", status = "available"))
+                    }
 
                 response.status shouldBe HttpStatusCode.Created
                 val pet = response.body<Pet>()
@@ -57,10 +59,11 @@ class PetRoutesIntegrationTest : FeatureSpec({
                 application { module() }
                 val client = jsonClient()
 
-                val response = client.post("/pet/") {
-                    contentType(ContentType.Application.Json)
-                    setBody(Pet(id = null, name = "X", photoUrl = "bad-url", status = "invalid"))
-                }
+                val response =
+                    client.post("/pet/") {
+                        contentType(ContentType.Application.Json)
+                        setBody(Pet(id = null, name = "X", photoUrl = "bad-url", status = "invalid"))
+                    }
 
                 response.status shouldBe HttpStatusCode.BadRequest
             }

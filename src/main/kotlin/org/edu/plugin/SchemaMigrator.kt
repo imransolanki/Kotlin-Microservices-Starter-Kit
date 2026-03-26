@@ -9,9 +9,10 @@ class SchemaMigrator(private val datasource: DataSource) {
     }
 
     fun run() {
-        val flyway = Flyway.configure().dataSource(datasource.hikari())
-            .baselineOnMigrate(true)
-            .load()
+        val flyway =
+            Flyway.configure().dataSource(datasource.hikari())
+                .baselineOnMigrate(true)
+                .load()
 
         try {
             flyway.info()

@@ -6,7 +6,6 @@ import org.edu.repository.PetRepository
 import org.slf4j.LoggerFactory
 
 class PetService(private val repository: PetRepository) {
-
     private val log = LoggerFactory.getLogger(PetService::class.java)
 
     suspend fun createPet(pet: Pet): Pet {

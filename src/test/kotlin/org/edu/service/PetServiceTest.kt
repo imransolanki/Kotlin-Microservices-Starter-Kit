@@ -20,10 +20,13 @@ class PetServiceTest : FeatureSpec(
         }
 
         val service = PetService(PetRepositoryImpl())
-        val pet = Pet(
-            name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
-            id = 1
-        )
+        val pet =
+            Pet(
+                name = "Joe",
+                photoUrl = "https://some-cdn.photo-url.png",
+                status = "available",
+                id = 1,
+            )
 
         feature("createPet()") {
             scenario("valid pet") {
@@ -34,18 +37,24 @@ class PetServiceTest : FeatureSpec(
 
         feature("updatePet()") {
             scenario("update existing pet") {
-                val newPet = Pet(
-                    name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
-                    id = 1
-                )
+                val newPet =
+                    Pet(
+                        name = "Joe",
+                        photoUrl = "https://some-cdn.photo-url.png",
+                        status = "available",
+                        id = 1,
+                    )
                 val updatedPet = service.updatePet(newPet)
                 updatedPet shouldBe newPet
             }
             scenario("update non existing pet") {
-                val nonExistingPet = Pet(
-                    name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
-                    id = 1000
-                )
+                val nonExistingPet =
+                    Pet(
+                        name = "Joe",
+                        photoUrl = "https://some-cdn.photo-url.png",
+                        status = "available",
+                        id = 1000,
+                    )
                 val ex = shouldThrow<NotFoundException> { service.updatePet(nonExistingPet) }
                 ex.message shouldBe "Pet with id ${nonExistingPet.id} not found"
             }
@@ -76,5 +85,5 @@ class PetServiceTest : FeatureSpec(
                 ex.message shouldBe "Pet with the name $petName not found"
             }
         }
-    }
+    },
 )

@@ -16,11 +16,13 @@ fun Application.configureDependency() {
 @OptIn(ExperimentalHoplite::class)
 fun environment(): EnvironmentConfig {
     val profile = System.getenv("APP_PROFILE") ?: ""
-    val builder = ConfigLoaderBuilder.default().addPropertySource(
-        EnvironmentVariablesPropertySource(
-            useUnderscoresAsSeparator = true, allowUppercaseNames = true
+    val builder =
+        ConfigLoaderBuilder.default().addPropertySource(
+            EnvironmentVariablesPropertySource(
+                useUnderscoresAsSeparator = true,
+                allowUppercaseNames = true,
+            ),
         )
-    )
     if (profile.isNotBlank()) {
         builder.addResourceSource("/application-$profile.yaml")
     }

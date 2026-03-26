@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm") version "2+"
     id("io.ktor.plugin") version "2+"
     id("org.jetbrains.kotlin.plugin.serialization") version "1+"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
 group = "org.edu"

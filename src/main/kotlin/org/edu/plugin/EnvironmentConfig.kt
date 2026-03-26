@@ -2,7 +2,7 @@ package org.edu.plugin
 
 data class EnvironmentConfig(
     val ktor: KtorConfig,
-    val database: DatabaseConfig
+    val database: DatabaseConfig,
 )
 
 data class KtorConfig(val application: ApplicationConfig, val deployment: DeploymentConfig)
