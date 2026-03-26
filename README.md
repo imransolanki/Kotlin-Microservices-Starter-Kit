@@ -1,5 +1,7 @@
 ## Kotlin Microservices Starter Kit
 
+![CI](https://github.com/imransolanki/Kotlin-Microservices-Starter-Kit/actions/workflows/ci.yml/badge.svg)
+
 > A production-ready microservice template — clone, run, and start building.
 
 ### 🚀 Get Running in 30 Seconds
