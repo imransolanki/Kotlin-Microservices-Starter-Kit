@@ -13,6 +13,7 @@ using below libraries
 - Simple, modular architecture for microservices. 
 - Configurable and scalable components. 
 - Follows best practices for Kotlin development.
+- CI via GitHub Actions (build & test on every push/PR to `main`)
 
 ### Setup
 - Clone the repository
