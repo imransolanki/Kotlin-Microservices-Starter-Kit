@@ -1,14 +1,15 @@
 package org.edu.service
 
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FeatureSpec
+import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import org.edu.api.NotFoundException
 import org.edu.api.Pet
 import org.edu.persistence.PetsTable
+import org.edu.repository.PetRepositoryImpl
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.edu.repository.PetRepositoryImpl
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PetServiceTest : FeatureSpec(
@@ -27,46 +28,38 @@ class PetServiceTest : FeatureSpec(
         feature("createPet()") {
             scenario("valid pet") {
                 val result = service.createPet(pet)
-
-                result shouldBeRight pet
+                result shouldBe pet
             }
         }
 
         feature("updatePet()") {
             scenario("update existing pet") {
-                val newPet =
-                    Pet(
-                        name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
-                        id = 1
-                    )
+                val newPet = Pet(
+                    name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
+                    id = 1
+                )
                 val updatedPet = service.updatePet(newPet)
-
-                updatedPet shouldBeRight newPet
+                updatedPet shouldBe newPet
             }
             scenario("update non existing pet") {
-                val nonExistingPet =
-                    Pet(
-                        name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
-                        id = 1000
-                    )
-                val result = service.updatePet(nonExistingPet)
-
-                result.shouldBeLeft()
-                result.leftOrNull()!!.message shouldBe "Pet with id ${nonExistingPet.id} not found"
+                val nonExistingPet = Pet(
+                    name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
+                    id = 1000
+                )
+                val ex = shouldThrow<NotFoundException> { service.updatePet(nonExistingPet) }
+                ex.message shouldBe "Pet with id ${nonExistingPet.id} not found"
             }
         }
 
         feature("getPet()") {
             scenario("find an existing pet") {
-                val result = service.getPet(1)
-                result.shouldBeRight()
+                service.getPet(1) shouldBe pet
             }
 
             scenario("find non-existing pet") {
                 val petId: Long = 1000
-                val result = service.getPet(petId)
-                result.shouldBeLeft()
-                result.leftOrNull()!!.message shouldBe "Pet with id $petId not found"
+                val ex = shouldThrow<NotFoundException> { service.getPet(petId) }
+                ex.message shouldBe "Pet with id $petId not found"
             }
         }
 
@@ -74,17 +67,14 @@ class PetServiceTest : FeatureSpec(
             service.createPet(pet)
 
             scenario("delete an existing pet") {
-                val actual = service.deletePet(pet.name)
-                actual.shouldBeRight()
+                service.deletePet(pet.name) shouldBeGreaterThan 0
             }
 
             scenario("delete a non-existing pet") {
                 val petName = "absentPet"
-                val result = service.deletePet(petName)
-                result.shouldBeLeft()
-                result.leftOrNull()!!.message shouldBe "Pet with the name $petName not found"
+                val ex = shouldThrow<NotFoundException> { service.deletePet(petName) }
+                ex.message shouldBe "Pet with the name $petName not found"
             }
         }
     }
 )
-

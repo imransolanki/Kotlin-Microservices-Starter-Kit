@@ -17,41 +17,27 @@ fun Route.routes() {
     route("/pet") {
         post("/") {
             val request = call.receive<Pet>()
-
             val validation = validatePet(request)
-
-            validation.isLeft { return@post call.respond(BadRequest, validation.leftOrNull()!!) }
-
-            val result = service.createPet(request)
-            return@post call.respond(Created, result.getOrNull()!!)
+            validation.onLeft { return@post call.respond(BadRequest, ErrorResponse(it.joinToString { e -> e.message })) }
+            call.respond(Created, service.createPet(request))
         }
 
         put("/") {
             val request = call.receive<Pet>()
-
             val validation = validatePet(request)
-
-            validation.isLeft { return@put call.respond(BadRequest, validation.leftOrNull()!!) }
-
-            val result = service.updatePet(request)
-            result.isLeft { return@put call.respond(BadRequest, result.leftOrNull()!!) }
-            result.isRight { return@put call.respond(OK, result.getOrNull()!!) }
+            validation.onLeft { throw BadRequestException(it.joinToString { e -> e.message }) }
+            call.respond(OK, service.updatePet(request))
         }
 
         get("/{petId}") {
-            val petId: Long = call.parameters["petId"]!!.toLong()
-
-            val result = service.getPet(petId)
-            result.isLeft { return@get call.respond(BadRequest, result.leftOrNull()!!) }
-            result.isRight { return@get call.respond(OK, result.getOrNull()!!) }
+            val petId = call.parameters["petId"]?.toLongOrNull()
+                ?: throw BadRequestException("petId must be a valid number")
+            call.respond(OK, service.getPet(petId))
         }
 
         delete("/{petName}") {
-            val petName: String = call.parameters["petName"]!!
-
-            val result = service.deletePet(petName)
-            result.isLeft { return@delete call.respond(BadRequest, result.leftOrNull()!!) }
-            result.isRight { return@delete call.respond(OK, result.getOrNull()!!) }
+            val petName = call.parameters["petName"]!!
+            call.respond(OK, service.deletePet(petName))
         }
     }
 }

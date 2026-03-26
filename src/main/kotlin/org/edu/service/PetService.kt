@@ -1,31 +1,30 @@
 package org.edu.service
 
-import arrow.core.Either
+import org.edu.api.NotFoundException
 import org.edu.api.Pet
 import org.edu.repository.PetRepository
 
 class PetService(private val repository: PetRepository) {
 
-    suspend fun createPet(pet: Pet): Either<Throwable, Pet> {
+    suspend fun createPet(pet: Pet): Pet {
         val petId = repository.create(pet)
-        return Either.Right(pet.copy(id = petId))
+        return pet.copy(id = petId)
     }
 
-    suspend fun updatePet(request: Pet): Either<Throwable, Pet> {
+    suspend fun updatePet(request: Pet): Pet {
         val updated = repository.update(request)
-        if (!updated) return Either.Left(Throwable(message = "Pet with id ${request.id} not found"))
-        return Either.Right(request)
+        if (!updated) throw NotFoundException("Pet with id ${request.id} not found")
+        return request
     }
 
-    suspend fun getPet(petId: Long): Either<Throwable, Pet> {
-        val result = repository.findById(petId)
-            ?: return Either.Left(Throwable(message = "Pet with id $petId not found"))
-        return Either.Right(result)
+    suspend fun getPet(petId: Long): Pet {
+        return repository.findById(petId)
+            ?: throw NotFoundException("Pet with id $petId not found")
     }
 
-    suspend fun deletePet(petName: String): Either<Throwable, Int> {
+    suspend fun deletePet(petName: String): Int {
         val count = repository.deleteByName(petName)
-        if (count == 0) return Either.Left(Throwable(message = "Pet with the name $petName not found"))
-        return Either.Right(count)
+        if (count == 0) throw NotFoundException("Pet with the name $petName not found")
+        return count
     }
 }
