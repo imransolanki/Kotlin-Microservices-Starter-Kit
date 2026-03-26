@@ -1,21 +1,4 @@
 environment: "docker"
 
-ktor:
-  application:
-    modules:
-      - org.edu.ApplicationKt.module
-  deployment:
-    port: 8080
-    shutdownGracePeriod: 2000
-    shutdownTimeout: 3000
-
 database:
-  name: "pet-store"
-  user: "user"
   hostname: "postgres"
-  port: 5432
-  password: "password"
-  driver: "org.postgresql.Driver"
-  autoCommit: false
-  pool:
-    max: 10

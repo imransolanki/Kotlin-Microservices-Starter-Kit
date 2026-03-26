@@ -17,9 +17,34 @@ using below libraries
 
 ### Setup
 - Clone the repository
-- Install [PostgresSQL](https://www.postgresql.org/) database server and create a DB using details mentioned in `application.yaml
-- Install dependencies with gradle 
+- Install [PostgresSQL](https://www.postgresql.org/) database server and create a DB using details mentioned in `application.yaml`
+- Install dependencies with gradle
 - Run services using `./gradlew run`
+
+### Configuration
+
+The app uses profile-based configuration via [hoplite](https://github.com/sksamuel/hoplite). Set the `APP_PROFILE` env var to load a profile-specific config that overrides defaults from `application.yaml`.
+
+| Profile | File | Use case |
+|---------|------|----------|
+| (none) | `application.yaml` | Default/test config |
+| `dev` | `application-dev.yaml` | Local development |
+| `prod` | `application-prod.yaml` | Production |
+| `docker` | `application-docker.yaml` | Docker Compose |
+
+```bash
+# Run with dev profile
+APP_PROFILE=dev ./gradlew run
+
+# Run with Docker
+docker compose up --build   # uses APP_PROFILE=docker automatically
+```
+
+Individual values can also be overridden via environment variables using `UPPER_SNAKE_CASE` with underscores as separators:
+
+```bash
+DATABASE_HOSTNAME=mydb.example.com DATABASE_PORT=5433 ./gradlew run
+```
 
 
 Reference Blog: [Building High-Quality Microservices with Kotlin: Best Practices for Developers](https://medium.com/technogise/building-high-quality-microservices-with-kotlin-best-practices-for-developers-b0058dc7ab99)

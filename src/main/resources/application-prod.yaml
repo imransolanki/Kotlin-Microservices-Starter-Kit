@@ -1,0 +1,5 @@
+environment: "prod"
+
+database:
+  pool:
+    max: 20

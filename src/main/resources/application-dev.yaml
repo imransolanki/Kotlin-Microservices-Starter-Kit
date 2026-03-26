@@ -1,0 +1,6 @@
+environment: "dev"
+
+database:
+  hostname: "localhost"
+  pool:
+    max: 5
