@@ -1,50 +1,226 @@
-## Description
-Starter project with easy to
-understand microservice developed
-using below libraries
-- ⚡  [ktor](https://ktor.io/) - A Kotlin framework for building asynchronous servers and clients in connected systems
-- 💉 [koin](https://insert-koin.io/) - A lightweight dependency injection framework for Kotlin with a simple and flexible API
-- 🗄️ [exposed](https://github.com/JetBrains/Exposed) - A Kotlin SQL library providing both DSL and DAO-based database access
-- 🔀 [either](https://apidocs.arrow-kt.io/arrow-core/arrow.core/-either/index.html) - A Kotlin implementation of the Either monad for handling computations that can result in either success or failure
-- ⚙️ [hoplite](https://github.com/sksamuel/hoplite) - A Kotlin library for loading and managing configuration in a type-safe manner from various formats
-- 🧪 [kotest](https://kotest.io/) - A Kotlin testing framework that provides a flexible and expressive test structure with various matchers and property-based testing
+## Kotlin Microservices Starter Kit
 
-### Features
-- Simple, modular architecture for microservices. 
-- Configurable and scalable components. 
-- Follows best practices for Kotlin development.
-- CI via GitHub Actions (build & test on every push/PR to `main`)
+> A production-ready microservice template — clone, run, and start building.
 
-### Setup
-- Clone the repository
-- Install [PostgresSQL](https://www.postgresql.org/) database server and create a DB using details mentioned in `application.yaml`
-- Install dependencies with gradle
-- Run services using `./gradlew run`
+### 🚀 Get Running in 30 Seconds
 
-### Configuration
+```bash
+git clone https://github.com/imransolanki/Kotlin-Microservices-Starter-Kit.git
+cd Kotlin-Microservices-Starter-Kit
+docker compose up --build
+```
 
-The app uses profile-based configuration via [hoplite](https://github.com/sksamuel/hoplite). Set the `APP_PROFILE` env var to load a profile-specific config that overrides defaults from `application.yaml`.
+That's it. Open http://localhost:8080/swagger to explore the API.
+
+### 🧪 Try It Out
+
+<details>
+<summary>Create a pet</summary>
+
+```bash
+curl -s -X POST http://localhost:8080/pet/ \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Buddy","photo_url":"https://cdn.example.com/buddy.png","status":"available"}'
+```
+</details>
+
+<details>
+<summary>Get a pet</summary>
+
+```bash
+curl -s http://localhost:8080/pet/1
+```
+</details>
+
+<details>
+<summary>Update a pet</summary>
+
+```bash
+curl -s -X PUT http://localhost:8080/pet/ \
+  -H "Content-Type: application/json" \
+  -d '{"id":1,"name":"Buddy","photo_url":"https://cdn.example.com/buddy.png","status":"sold"}'
+```
+</details>
+
+<details>
+<summary>Delete a pet</summary>
+
+```bash
+curl -s -X DELETE http://localhost:8080/pet/Buddy
+```
+</details>
+
+<details>
+<summary>Health check</summary>
+
+```bash
+curl -s http://localhost:8080/health
+# {"status":"UP"}
+```
+</details>
+
+### 🏗️ Architecture
+
+```
+┌──────────────────────────────────────────────────┐
+│                   Ktor Server                    │
+│                                                  │
+│  ┌──────────┐   ┌──────────┐   ┌─────────────┐  │
+│  │  Routes   │──▶│ Service  │──▶│ Repository  │  │
+│  │ (API)     │   │ (Logic)  │   │ (DB Access) │  │
+│  └──────────┘   └──────────┘   └──────┬──────┘  │
+│       │                               │          │
+│       │              ┌────────────────┘          │
+│       ▼              ▼                           │
+│  ┌──────────┐   ┌──────────┐                     │
+│  │Validator  │   │ Exposed  │                     │
+│  │(Konform)  │   │  + DSL   │                     │
+│  └──────────┘   └────┬─────┘                     │
+│                      │                           │
+│  ┌──────────────┐    │    ┌───────────────────┐  │
+│  │ StatusPages  │    │    │ Koin (DI)         │  │
+│  │ (Errors)     │    │    │ Hoplite (Config)  │  │
+│  └──────────────┘    │    └───────────────────┘  │
+└──────────────────────┼───────────────────────────┘
+                       │
+                       ▼
+              ┌────────────────┐
+              │   PostgreSQL   │
+              │  (HikariCP +   │
+              │   Flyway)      │
+              └────────────────┘
+```
+
+### ✨ What's Included
+
+| Feature | Details |
+|---------|---------|
+| 🔀 Layered architecture | Route → Service → Repository |
+| ⚡ Async DB access | `newSuspendedTransaction` (coroutine-friendly) |
+| 🛡️ Error handling | StatusPages + custom exceptions → proper HTTP codes |
+| 🗃️ Migrations | Flyway runs on startup |
+| 💚 Health check | `GET /health` with DB connectivity verification |
+| 📖 Swagger UI | Interactive API docs at `/swagger` |
+| 📋 Structured logging | JSON logs via logstash encoder |
+| 🌐 CORS | Sensible defaults configured |
+| ⚙️ Profile configs | dev / prod / docker via `APP_PROFILE` |
+| 🐳 Docker | `docker compose up` — app + Postgres |
+| ✅ CI | GitHub Actions — build, test, lint |
+| 🧹 Linting | ktlint enforced in build |
+
+### 🛠️ Built With
+
+| Library | Purpose |
+|---------|---------|
+| [ktor](https://ktor.io/) | Async server framework |
+| [koin](https://insert-koin.io/) | Dependency injection |
+| [exposed](https://github.com/JetBrains/Exposed) | Kotlin SQL (DSL + DAO) |
+| [hoplite](https://github.com/sksamuel/hoplite) | Type-safe configuration |
+| [kotest](https://kotest.io/) | Testing framework |
+| [konform](https://github.com/konform-kt/konform) | Input validation |
+| [flyway](https://flywaydb.org/) | Database migrations |
+
+### 📁 Project Structure
+
+<details>
+<summary>Click to expand</summary>
+
+```
+src/main/kotlin/
+├── Application.kt                  # Entry point, plugin wiring
+└── org/edu/
+    ├── api/
+    │   ├── Pet.kt                  # Data model
+    │   ├── PetRoutes.kt            # Route definitions
+    │   ├── HealthRoute.kt          # GET /health
+    │   ├── Validator.kt            # Input validation
+    │   ├── Exceptions.kt           # NotFoundException, BadRequestException
+    │   └── ErrorResponse.kt        # Consistent error model
+    ├── service/
+    │   └── PetService.kt           # Business logic
+    ├── repository/
+    │   ├── PetRepository.kt        # Interface
+    │   └── PetRepositoryImpl.kt    # DB implementation
+    ├── persistence/
+    │   └── PetEntity.kt            # Exposed table + entity
+    └── plugin/
+        ├── AppModule.kt            # Koin DI module
+        ├── Configuration.kt        # Hoplite config loader
+        ├── Routing.kt              # Route registration
+        ├── Serialization.kt        # Gson setup
+        ├── StatusPages.kt          # Global exception handling
+        ├── Cors.kt                 # CORS defaults
+        ├── DatabaseConfig.kt       # HikariCP config
+        ├── DataSource.kt           # DataSource provider
+        ├── EnvironmentConfig.kt    # Config data classes
+        └── SchemaMigrator.kt       # Flyway migration runner
+
+src/main/resources/
+├── application.yaml                # Default config
+├── application-dev.yaml            # Dev profile
+├── application-prod.yaml           # Prod profile
+├── application-docker.yaml         # Docker profile
+├── db/migration/
+│   └── V1__create_pet.sql          # Flyway migration
+├── openapi/
+│   └── documentation.yaml          # OpenAPI spec
+└── logback.xml                     # Structured JSON logging
+```
+</details>
+
+### ⚙️ Configuration
+
+<details>
+<summary>Profile-based config</summary>
+
+Set `APP_PROFILE` to load a profile-specific config that overrides `application.yaml`:
 
 | Profile | File | Use case |
 |---------|------|----------|
-| (none) | `application.yaml` | Default/test config |
+| (none) | `application.yaml` | Default/test |
 | `dev` | `application-dev.yaml` | Local development |
 | `prod` | `application-prod.yaml` | Production |
 | `docker` | `application-docker.yaml` | Docker Compose |
 
 ```bash
-# Run with dev profile
 APP_PROFILE=dev ./gradlew run
-
-# Run with Docker
-docker compose up --build   # uses APP_PROFILE=docker automatically
 ```
+</details>
 
-Individual values can also be overridden via environment variables using `UPPER_SNAKE_CASE` with underscores as separators:
+<details>
+<summary>Environment variable overrides</summary>
+
+Any config value can be overridden with `UPPER_SNAKE_CASE` env vars:
 
 ```bash
 DATABASE_HOSTNAME=mydb.example.com DATABASE_PORT=5433 ./gradlew run
 ```
+</details>
 
+### 📝 Adding a New Entity
+
+1. Create the Exposed table + entity in `persistence/`
+2. Add a Flyway migration in `src/main/resources/db/migration/`
+3. Create a `Repository` interface + implementation in `repository/`
+4. Create a `Service` class in `service/`
+5. Add routes in `api/` and register them in `plugin/Routing.kt`
+6. Wire the DI in `plugin/AppModule.kt`
+7. Update `openapi/documentation.yaml`
+
+### 🧑‍💻 Development
+
+```bash
+./gradlew build          # Build, test, and lint
+./gradlew test           # Run tests only
+./gradlew ktlintFormat   # Auto-fix code style
+```
+
+**Running without Docker:**
+```bash
+psql -U user -h localhost -c "CREATE DATABASE \"pet-store\";"
+./gradlew run
+```
+
+---
 
 Reference Blog: [Building High-Quality Microservices with Kotlin: Best Practices for Developers](https://medium.com/technogise/building-high-quality-microservices-with-kotlin-best-practices-for-developers-b0058dc7ab99)
