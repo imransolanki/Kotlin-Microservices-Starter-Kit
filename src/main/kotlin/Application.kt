@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureDependency()
+    configureCors()
     configureStatusPages()
     configureRouting()
     configureSerialization()
