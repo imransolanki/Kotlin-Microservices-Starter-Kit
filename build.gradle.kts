@@ -60,6 +60,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_version")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
+    testImplementation("io.ktor:ktor-client-content-negotiation")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
