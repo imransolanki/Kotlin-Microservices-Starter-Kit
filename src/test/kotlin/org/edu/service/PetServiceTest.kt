@@ -8,6 +8,7 @@ import org.edu.api.Pet
 import org.edu.persistence.PetsTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.edu.repository.PetRepositoryImpl
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PetServiceTest : FeatureSpec(
@@ -17,7 +18,7 @@ class PetServiceTest : FeatureSpec(
             transaction { SchemaUtils.create(PetsTable) }
         }
 
-        val service = PetService()
+        val service = PetService(PetRepositoryImpl())
         val pet = Pet(
             name = "Joe", photoUrl = "https://some-cdn.photo-url.png", status = "available",
             id = 1
