@@ -38,7 +38,7 @@ dependencies {
 
     implementation("io.konform:konform:0.7.0")
 
-    implementation("io.ktor:ktor-serialization-gson")
+    implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
 
     implementation(platform("io.arrow-kt:arrow-stack:1+"))

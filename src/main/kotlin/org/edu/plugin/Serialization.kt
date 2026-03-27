@@ -1,20 +1,17 @@
 package org.edu.plugin
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
-import io.ktor.serialization.gson.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
+import kotlinx.serialization.json.Json
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
-        gson {
-            gsonSettings()
-        }
+        json(
+            Json {
+                ignoreUnknownKeys = true
+                encodeDefaults = true
+            },
+        )
     }
-}
-
-fun GsonBuilder.gsonSettings(): GsonBuilder {
-    setFieldNamingStrategy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-    return this
 }

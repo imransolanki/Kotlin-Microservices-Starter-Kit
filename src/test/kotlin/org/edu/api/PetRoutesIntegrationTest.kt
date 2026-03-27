@@ -1,13 +1,12 @@
 package org.edu.api
 
-import com.google.gson.FieldNamingPolicy
 import io.kotest.core.spec.style.FeatureSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.serialization.gson.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import org.edu.module
@@ -29,7 +28,7 @@ class PetRoutesIntegrationTest : FeatureSpec({
     fun ApplicationTestBuilder.jsonClient() =
         createClient {
             install(ContentNegotiation) {
-                gson { setFieldNamingStrategy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) }
+                json()
             }
         }
 
@@ -43,7 +42,7 @@ class PetRoutesIntegrationTest : FeatureSpec({
                 val response =
                     client.post("/pet/") {
                         contentType(ContentType.Application.Json)
-                        setBody(Pet(id = null, name = "Buddy", photoUrl = "https://cdn.example.com/buddy.png", status = "available"))
+                        setBody(Pet(name = "Buddy", photoUrl = "https://cdn.example.com/buddy.png", status = "available"))
                     }
 
                 response.status shouldBe HttpStatusCode.Created
@@ -62,7 +61,7 @@ class PetRoutesIntegrationTest : FeatureSpec({
                 val response =
                     client.post("/pet/") {
                         contentType(ContentType.Application.Json)
-                        setBody(Pet(id = null, name = "X", photoUrl = "bad-url", status = "invalid"))
+                        setBody(Pet(name = "X", photoUrl = "bad-url", status = "invalid"))
                     }
 
                 response.status shouldBe HttpStatusCode.BadRequest
